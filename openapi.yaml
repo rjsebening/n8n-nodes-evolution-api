@@ -1,0 +1,4503 @@
+openapi: 3.0.3
+info:
+  title: Evolution API | v2.3.*
+  description: API documentation for Evolution API v2.3, generated from Postman Collection.
+  version: 2.3.0
+  contact:
+    name: API Support
+    url: https://api.example.com
+    email: support@example.com
+tags:
+  - name: Instance
+  - name: Proxy
+  - name: Settings
+  - name: Send Message
+  - name: Call
+  - name: Chat
+  - name: Label
+  - name: Profile Settings
+  - name: Group
+  - name: Integrations
+  - name: Chatbot
+  - name: Typebot
+  - name: Evolution Bot
+  - name: Openai
+  - name: Dify
+  - name: Flowise
+  - name: N8N
+  - name: Evo AI
+  - name: Cloud API Oficial
+  - name: Evolution Channel
+  - name: Storage
+  - name: Get Informations
+  - name: Metrics
+servers:
+  - url: '{baseUrl}'
+    variables:
+      baseUrl:
+        default: https://api.example.com
+        description: The Base URL of the API instance
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: apikey
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    InstanceCreate:
+      type: object
+      required:
+        - instanceName
+      properties:
+        instanceName:
+          type: string
+        token:
+          type: string
+        number:
+          type: string
+        qrcode:
+          type: boolean
+        integration:
+          type: string
+          enum:
+            - WHATSAPP-BAILEYS
+            - WHATSAPP-BUSINESS
+            - EVOLUTION
+          default: WHATSAPP-BAILEYS
+        rejectCall:
+          type: boolean
+        msgCall:
+          type: string
+        groupsIgnore:
+          type: boolean
+        alwaysOnline:
+          type: boolean
+        readMessages:
+          type: boolean
+        readStatus:
+          type: boolean
+        syncFullHistory:
+          type: boolean
+        webhook:
+          $ref: '#/components/schemas/WebhookConfig'
+    WebhookConfig:
+      type: object
+      properties:
+        url:
+          type: string
+        byEvents:
+          type: boolean
+        base64:
+          type: boolean
+        headers:
+          type: object
+        events:
+          type: array
+          items:
+            type: string
+    ProxyConfig:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        host:
+          type: string
+        port:
+          type: string
+        protocol:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+    SettingsConfig:
+      type: object
+      properties:
+        rejectCall:
+          type: boolean
+        msgCall:
+          type: string
+        groupsIgnore:
+          type: boolean
+        alwaysOnline:
+          type: boolean
+        readMessages:
+          type: boolean
+        syncFullHistory:
+          type: boolean
+        readStatus:
+          type: boolean
+    SendText:
+      type: object
+      required:
+        - number
+        - text
+      properties:
+        number:
+          type: string
+        text:
+          type: string
+        delay:
+          type: integer
+        linkPreview:
+          type: boolean
+    SendMedia:
+      type: object
+      required:
+        - number
+        - mediatype
+        - media
+      properties:
+        number:
+          type: string
+        mediatype:
+          type: string
+          enum:
+            - image
+            - video
+            - document
+        mimetype:
+          type: string
+        caption:
+          type: string
+        media:
+          type: string
+        fileName:
+          type: string
+    SendPtv:
+      type: object
+      required:
+        - number
+        - video
+      properties:
+        number:
+          type: string
+        video:
+          type: string
+    SendAudio:
+      type: object
+      required:
+        - number
+        - audio
+      properties:
+        number:
+          type: string
+        audio:
+          type: string
+    SendStatus:
+      type: object
+      required:
+        - type
+        - content
+      properties:
+        type:
+          type: string
+        content:
+          type: string
+        caption:
+          type: string
+        backgroundColor:
+          type: string
+        font:
+          type: integer
+        allContacts:
+          type: boolean
+        statusJidList:
+          type: array
+          items:
+            type: string
+    SendLocation:
+      type: object
+      required:
+        - number
+        - latitude
+        - longitude
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+        address:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+    SendContact:
+      type: object
+      required:
+        - number
+        - contact
+      properties:
+        number:
+          type: string
+        contact:
+          type: array
+          items:
+            type: object
+            properties:
+              fullName:
+                type: string
+              wuid:
+                type: string
+              phoneNumber:
+                type: string
+    SendReaction:
+      type: object
+      required:
+        - key
+        - reaction
+      properties:
+        key:
+          type: object
+          properties:
+            remoteJid:
+              type: string
+            fromMe:
+              type: boolean
+            id:
+              type: string
+        reaction:
+          type: string
+    SendPoll:
+      type: object
+      required:
+        - number
+        - name
+        - values
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+        selectableCount:
+          type: integer
+        values:
+          type: array
+          items:
+            type: string
+    SendList:
+      type: object
+      required:
+        - number
+        - title
+        - buttonText
+        - sections
+      properties:
+        number:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        buttonText:
+          type: string
+        footerText:
+          type: string
+        sections:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              rows:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    rowId:
+                      type: string
+    SendButton:
+      type: object
+      required:
+        - number
+        - title
+        - buttons
+      properties:
+        number:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        footer:
+          type: string
+        buttons:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              displayText:
+                type: string
+              id:
+                type: string
+    SetPresence:
+      type: object
+      required:
+        - presence
+      properties:
+        presence:
+          type: string
+          enum:
+            - available
+            - unavailable
+            - composing
+            - recording
+            - paused
+        delay:
+          type: integer
+        number:
+          type: string
+    ChatwootConfig:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        accountId:
+          type: string
+        token:
+          type: string
+        url:
+          type: string
+        signMsg:
+          type: boolean
+        reopenConversation:
+          type: boolean
+        conversationPending:
+          type: boolean
+        nameInbox:
+          type: string
+        mergeBrazilContacts:
+          type: boolean
+        importContacts:
+          type: boolean
+        importMessages:
+          type: boolean
+        daysLimitImportMessages:
+          type: integer
+        signDelimiter:
+          type: string
+        autoCreate:
+          type: boolean
+        organization:
+          type: string
+        logo:
+          type: string
+        ignoreJids:
+          type: array
+          items:
+            type: string
+    TypebotCreate:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        url:
+          type: string
+        typebot:
+          type: string
+        triggerType:
+          type: string
+        triggerOperator:
+          type: string
+        triggerValue:
+          type: string
+        expire:
+          type: integer
+        keywordFinish:
+          type: string
+        delayMessage:
+          type: integer
+        unknownMessage:
+          type: string
+        listeningFromMe:
+          type: boolean
+        stopBotFromMe:
+          type: boolean
+        keepOpen:
+          type: boolean
+        debounceTime:
+          type: integer
+    GroupCreate:
+      type: object
+      required:
+        - subject
+        - participants
+      properties:
+        subject:
+          type: string
+        description:
+          type: string
+        participants:
+          type: array
+          items:
+            type: string
+    GroupUpdateParticipant:
+      type: object
+      required:
+        - action
+        - participants
+      properties:
+        action:
+          type: string
+          enum:
+            - add
+            - remove
+            - promote
+            - demote
+        participants:
+          type: array
+          items:
+            type: string
+    TemplateCreate:
+      type: object
+      required:
+        - name
+        - category
+        - language
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        allowCategoryChange:
+          type: boolean
+        language:
+          type: string
+        components:
+          type: array
+          items:
+            type: object
+security:
+  - ApiKeyAuth: []
+paths:
+  /instance/create:
+    post:
+      tags:
+        - Instance
+      summary: Create Instance
+      description: Create a new instance
+      operationId: instanceCreate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstanceCreate'
+      responses:
+        '201':
+          description: Instance created
+  /instance/fetchInstances:
+    get:
+      tags:
+        - Instance
+      summary: Fetch Instances
+      description: Fetch all instances
+      operationId: instanceFetchInstances
+      parameters:
+        - name: instanceName
+          in: query
+          schema:
+            type: string
+        - name: instanceId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of instances
+  /instance/connect/{instance}:
+    get:
+      tags:
+        - Instance
+      summary: Instance Connect
+      description: Connect to an instance
+      operationId: instanceConnect
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: number
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Connection data (QR Code)
+  /instance/restart/{instance}:
+    post:
+      tags:
+        - Instance
+      summary: Restart Instance
+      description: Restart an instance
+      operationId: instanceRestart
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Instance restarted
+  /instance/setPresence/{instance}:
+    post:
+      tags:
+        - Instance
+      summary: Set Presence
+      description: Set presence for an instance
+      operationId: instanceSetPresence
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPresence'
+      responses:
+        '200':
+          description: Presence set
+  /instance/connectionState/{instance}:
+    get:
+      tags:
+        - Instance
+      summary: Connection Status
+      description: Get connection status of an instance
+      operationId: instanceConnectionState
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Connection state
+  /instance/logout/{instance}:
+    delete:
+      tags:
+        - Instance
+      summary: Logout Instance
+      description: Logout from an instance
+      operationId: instanceLogout
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Logged out
+  /instance/delete/{instance}:
+    delete:
+      tags:
+        - Instance
+      summary: Delete Instance
+      description: Delete an instance
+      operationId: instanceDelete
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Instance deleted
+  /proxy/set/{instance}:
+    post:
+      tags:
+        - Proxy
+      summary: Set Proxy
+      description: Set proxy for an instance
+      operationId: proxySet
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProxyConfig'
+      responses:
+        '200':
+          description: Proxy set
+  /proxy/find/{instance}:
+    get:
+      tags:
+        - Proxy
+      summary: Find Proxy
+      description: Find proxy configuration for an instance
+      operationId: proxyFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Proxy details
+  /settings/set/{instance}:
+    post:
+      tags:
+        - Settings
+      summary: Set Settings
+      description: Set settings for an instance
+      operationId: settingsSet
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettingsConfig'
+      responses:
+        '200':
+          description: Settings updated
+  /settings/find/{instance}:
+    get:
+      tags:
+        - Settings
+      summary: Find Settings
+      description: Find settings for an instance
+      operationId: settingsFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Settings details
+  /message/sendText/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send Text
+      description: Send a text message
+      operationId: messageSendText
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendText'
+      responses:
+        '201':
+          description: Message sent
+  /message/sendMedia/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send Media (URL or File)
+      description: Send media message
+      operationId: messageSendMedia
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMedia'
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: string
+                mediatype:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Media sent
+  /message/sendPtv/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send PTV
+      description: Send a video note (PTV)
+      operationId: messageSendPtv
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendPtv'
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: PTV sent
+  /message/sendWhatsAppAudio/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send Narrated Audio
+      description: Send a WhatsApp audio message
+      operationId: messageSendWhatsAppAudio
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendAudio'
+      responses:
+        '201':
+          description: Audio sent
+  /message/sendStatus/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send Status/Stories
+      description: Send a status update
+      operationId: messageSendStatus
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendStatus'
+      responses:
+        '201':
+          description: Status sent
+  /message/sendSticker/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send Sticker
+      description: Send a sticker
+      operationId: messageSendSticker
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - number
+                - sticker
+              properties:
+                number:
+                  type: string
+                sticker:
+                  type: string
+      responses:
+        '201':
+          description: Sticker sent
+  /message/sendLocation/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send Location
+      description: Send a location message
+      operationId: messageSendLocation
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendLocation'
+      responses:
+        '201':
+          description: Location sent
+  /message/sendContact/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send Contact
+      description: Send a contact message
+      operationId: messageSendContact
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendContact'
+      responses:
+        '201':
+          description: Contact sent
+  /message/sendReaction/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send Reaction
+      description: Send a reaction to a message
+      operationId: messageSendReaction
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendReaction'
+      responses:
+        '201':
+          description: Reaction sent
+  /message/sendPoll/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send Poll
+      description: Send a poll message
+      operationId: messageSendPoll
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendPoll'
+      responses:
+        '201':
+          description: Poll sent
+  /message/sendList/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send List
+      description: Send a list message
+      operationId: messageSendList
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendList'
+      responses:
+        '201':
+          description: List sent
+  /message/sendButtons/{instance}:
+    post:
+      tags:
+        - Send Message
+      summary: Send Button
+      description: Send a button message
+      operationId: messageSendButtons
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendButton'
+      responses:
+        '201':
+          description: Button message sent
+  /call/offer/{instance}:
+    post:
+      tags:
+        - Call
+      summary: Fake Call
+      description: Offer a fake call
+      operationId: callOffer
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: string
+                isVideo:
+                  type: boolean
+                callDuration:
+                  type: integer
+      responses:
+        '200':
+          description: Call offered
+  /chat/whatsappNumbers/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Check is WhatsApp Number
+      description: Check if numbers are registered on WhatsApp
+      operationId: chatWhatsappNumbers
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                numbers:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Check result
+  /chat/markMessageAsRead/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Read Messages
+      description: Mark messages as read
+      operationId: chatMarkMessageAsRead
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                readMessages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      remoteJid:
+                        type: string
+                      fromMe:
+                        type: boolean
+                      id:
+                        type: string
+      responses:
+        '200':
+          description: Messages marked as read
+  /chat/archiveChat/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Archive Chat
+      description: Archive or unarchive a chat
+      operationId: chatArchiveChat
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                chat:
+                  type: string
+                archive:
+                  type: boolean
+                lastMessage:
+                  type: object
+      responses:
+        '200':
+          description: Chat archived/unarchived
+  /chat/markChatUnread/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Mark Chat Unread
+      description: Mark a chat as unread
+      operationId: chatMarkChatUnread
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                chat:
+                  type: string
+                lastMessage:
+                  type: object
+      responses:
+        '200':
+          description: Chat marked unread
+  /chat/deleteMessageForEveryone/{instance}:
+    delete:
+      tags:
+        - Chat
+      summary: Delete Message
+      description: Delete a message for everyone
+      operationId: chatDeleteMessageForEveryone
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                remoteJid:
+                  type: string
+                fromMe:
+                  type: boolean
+                participant:
+                  type: string
+      responses:
+        '200':
+          description: Message deleted
+  /chat/fetchProfilePictureUrl/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Fetch Profile Picture
+      description: Fetch the profile picture URL
+      operationId: chatFetchProfilePictureUrl
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: string
+      responses:
+        '200':
+          description: Profile picture URL
+  /chat/getBase64FromMediaMessage/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Get Base64 From Media Message
+      description: Retrieve Base64 content from a media message
+      operationId: chatGetBase64FromMediaMessage
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: object
+                  properties:
+                    key:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                convertToMp4:
+                  type: boolean
+      responses:
+        '200':
+          description: Base64 data
+  /chat/updateMessage/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Update Message
+      description: Update a message
+      operationId: chatUpdateMessage
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: string
+                text:
+                  type: string
+                key:
+                  type: object
+      responses:
+        '200':
+          description: Message updated
+  /chat/sendPresence/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Send Presence
+      description: Send presence information
+      operationId: chatSendPresence
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPresence'
+      responses:
+        '200':
+          description: Presence sent
+  /message/updateBlockStatus/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Update Block Status
+      description: Block or unblock a number
+      operationId: messageUpdateBlockStatus
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                    - block
+                    - unblock
+      responses:
+        '200':
+          description: Block status updated
+  /chat/findContacts/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Find Contacts
+      description: Find contacts
+      operationId: chatFindContacts
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                where:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+      responses:
+        '200':
+          description: Contacts found
+  /chat/findMessages/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Find Messages
+      description: Find messages
+      operationId: chatFindMessages
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                where:
+                  type: object
+                page:
+                  type: integer
+                offset:
+                  type: integer
+      responses:
+        '200':
+          description: Messages found
+  /chat/findStatusMessage/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Find Status Message
+      description: Find status messages
+      operationId: chatFindStatusMessage
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                where:
+                  type: object
+                  properties:
+                    remoteJid:
+                      type: string
+                    id:
+                      type: string
+                page:
+                  type: integer
+                offset:
+                  type: integer
+      responses:
+        '200':
+          description: Status found
+  /chat/findChats/{instance}:
+    post:
+      tags:
+        - Chat
+      summary: Find Chats
+      description: Find chats
+      operationId: chatFindChats
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Chats found
+  /label/findLabels/{instance}:
+    get:
+      tags:
+        - Label
+      summary: Find Labels
+      description: Find all labels
+      operationId: labelFindLabels
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Labels found
+  /label/handleLabel/{instance}:
+    post:
+      tags:
+        - Label
+      summary: Handle Labels
+      description: Add or remove a label from a chat
+      operationId: labelHandleLabel
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: string
+                labelId:
+                  type: string
+                action:
+                  type: string
+                  enum:
+                    - add
+                    - remove
+      responses:
+        '200':
+          description: Label handled
+  /chat/fetchBusinessProfile/{instance}:
+    post:
+      tags:
+        - Profile Settings
+      summary: Fetch Business Profile
+      description: Fetch business profile information
+      operationId: chatFetchBusinessProfile
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: string
+      responses:
+        '200':
+          description: Business profile
+  /chat/fetchProfile/{instance}:
+    post:
+      tags:
+        - Profile Settings
+      summary: Fetch Profile
+      description: Fetch profile information
+      operationId: chatFetchProfile
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: string
+      responses:
+        '200':
+          description: Profile fetched
+  /chat/updateProfileName/{instance}:
+    post:
+      tags:
+        - Profile Settings
+      summary: Update Profile Name
+      description: Update the profile name
+      operationId: chatUpdateProfileName
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Profile name updated
+  /chat/updateProfileStatus/{instance}:
+    post:
+      tags:
+        - Profile Settings
+      summary: Update Profile Status
+      description: Update the profile status
+      operationId: chatUpdateProfileStatus
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Profile status updated
+  /chat/updateProfilePicture/{instance}:
+    post:
+      tags:
+        - Profile Settings
+      summary: Update Profile Picture
+      description: Update the profile picture
+      operationId: chatUpdateProfilePicture
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                picture:
+                  type: string
+      responses:
+        '200':
+          description: Profile picture updated
+  /chat/removeProfilePicture/{instance}:
+    delete:
+      tags:
+        - Profile Settings
+      summary: Remove Profile Picture
+      description: Remove the profile picture
+      operationId: chatRemoveProfilePicture
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Profile picture removed
+  /chat/fetchPrivacySettings/{instance}:
+    get:
+      tags:
+        - Profile Settings
+      summary: Fetch Privacy Settings
+      description: Fetch privacy settings
+      operationId: chatFetchPrivacySettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Privacy settings
+  /chat/updatePrivacySettings/{instance}:
+    post:
+      tags:
+        - Profile Settings
+      summary: Update Privacy Settings
+      description: Update privacy settings
+      operationId: chatUpdatePrivacySettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                readreceipts:
+                  type: string
+                profile:
+                  type: string
+                status:
+                  type: string
+                online:
+                  type: string
+                last:
+                  type: string
+                groupadd:
+                  type: string
+      responses:
+        '200':
+          description: Privacy settings updated
+  /group/create/{instance}:
+    post:
+      tags:
+        - Group
+      summary: Create Group
+      description: Create a new group
+      operationId: groupCreate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupCreate'
+      responses:
+        '201':
+          description: Group created
+  /group/updateGroupPicture/{instance}:
+    post:
+      tags:
+        - Group
+      summary: Update Group Picture
+      description: Update the group picture
+      operationId: groupUpdateGroupPicture
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupJid
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+      responses:
+        '200':
+          description: Group picture updated
+  /group/updateGroupSubject/{instance}:
+    post:
+      tags:
+        - Group
+      summary: Update Group Subject
+      description: Update the group subject
+      operationId: groupUpdateGroupSubject
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupJid
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subject:
+                  type: string
+      responses:
+        '200':
+          description: Group subject updated
+  /group/updateGroupDescription/{instance}:
+    post:
+      tags:
+        - Group
+      summary: Update Group Description
+      description: Update the group description
+      operationId: groupUpdateGroupDescription
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupJid
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Group description updated
+  /group/inviteCode/{instance}:
+    get:
+      tags:
+        - Group
+      summary: Fetch Invite Code
+      description: Fetch the group invite code
+      operationId: groupFetchInviteCode
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupJid
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Invite code fetched
+  /group/revokeInviteCode/{instance}:
+    post:
+      tags:
+        - Group
+      summary: Revoke Invite Code
+      description: Revoke the group invite code
+      operationId: groupRevokeInviteCode
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupJid
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Invite code revoked
+  /group/sendInvite/{instance}:
+    post:
+      tags:
+        - Group
+      summary: Send Invite Url
+      description: Send a group invite URL
+      operationId: groupSendInvite
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                groupJid:
+                  type: string
+                description:
+                  type: string
+                numbers:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Invite sent
+  /group/inviteInfo/{instance}:
+    get:
+      tags:
+        - Group
+      summary: Find Group by Invite Code
+      description: Find group information by invite code
+      operationId: groupInviteInfo
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: inviteCode
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Group info
+  /group/findGroupInfos/{instance}:
+    get:
+      tags:
+        - Group
+      summary: Find Group by Jid
+      description: Find group information by JID
+      operationId: groupFindGroupInfos
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupJid
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Group info
+  /group/fetchAllGroups/{instance}:
+    get:
+      tags:
+        - Group
+      summary: Fetch All Groups
+      description: Fetch all groups for the instance
+      operationId: groupFetchAllGroups
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: getParticipants
+          in: query
+          schema:
+            type: string
+            default: "false"
+      responses:
+        '200':
+          description: All groups
+  /group/participants/{instance}:
+    get:
+      tags:
+        - Group
+      summary: Find Participants
+      description: Find participants of a group
+      operationId: groupParticipants
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupJid
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Participants
+  /group/updateParticipant/{instance}:
+    post:
+      tags:
+        - Group
+      summary: Update Participant
+      description: Update group participants (add, remove, promote, demote)
+      operationId: groupUpdateParticipant
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupJid
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupUpdateParticipant'
+      responses:
+        '200':
+          description: Participant updated
+  /group/updateSetting/{instance}:
+    post:
+      tags:
+        - Group
+      summary: Update Setting
+      description: Update group settings
+      operationId: groupUpdateSetting
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupJid
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum:
+                    - announcement
+                    - not_announcement
+                    - locked
+                    - unlocked
+      responses:
+        '200':
+          description: Setting updated
+  /group/toggleEphemeral/{instance}:
+    post:
+      tags:
+        - Group
+      summary: Toggle Ephemeral
+      description: Toggle ephemeral messages for a group
+      operationId: groupToggleEphemeral
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupJid
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expiration:
+                  type: integer
+      responses:
+        '200':
+          description: Ephemeral toggled
+  /group/leaveGroup/{instance}:
+    delete:
+      tags:
+        - Group
+      summary: Leave Group
+      description: Leave a group
+      operationId: groupLeaveGroup
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupJid
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Group left
+  /websocket/set/{instance}:
+    post:
+      tags:
+        - Integrations
+      summary: Set Websocket
+      description: Set websocket configuration
+      operationId: websocketSet
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                websocket:
+                  $ref: '#/components/schemas/WebhookConfig'
+      responses:
+        '200':
+          description: Websocket set
+  /websocket/find/{instance}:
+    get:
+      tags:
+        - Integrations
+      summary: Find Websocket
+      description: Find websocket configuration
+      operationId: websocketFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Websocket info
+  /rabbitmq/set/{instance}:
+    post:
+      tags:
+        - Integrations
+      summary: Set Rabbitmq
+      description: Set RabbitMQ configuration
+      operationId: rabbitmqSet
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rabbitmq:
+                  $ref: '#/components/schemas/WebhookConfig'
+      responses:
+        '200':
+          description: Rabbitmq set
+  /rabbitmq/find/{instance}:
+    get:
+      tags:
+        - Integrations
+      summary: Find Rabbitmq
+      description: Find RabbitMQ configuration
+      operationId: rabbitmqFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rabbitmq info
+  /sqs/set/{instance}:
+    post:
+      tags:
+        - Integrations
+      summary: Set Sqs
+      description: Set SQS configuration
+      operationId: sqsSet
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sqs:
+                  $ref: '#/components/schemas/WebhookConfig'
+      responses:
+        '200':
+          description: Sqs set
+  /sqs/find/{instance}:
+    get:
+      tags:
+        - Integrations
+      summary: Find Sqs
+      description: Find SQS configuration
+      operationId: sqsFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sqs info
+  /nats/set/{instance}:
+    post:
+      tags:
+        - Integrations
+      summary: Set Nats
+      description: Set NATS configuration
+      operationId: natsSet
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sqs:
+                  $ref: '#/components/schemas/WebhookConfig'
+      responses:
+        '200':
+          description: Nats set
+  /nats/find/{instance}:
+    get:
+      tags:
+        - Integrations
+      summary: Find Nats
+      description: Find NATS configuration
+      operationId: natsFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Nats info
+  /pusher/set/{instance}:
+    post:
+      tags:
+        - Integrations
+      summary: Set Pusher
+      description: Set Pusher configuration
+      operationId: pusherSet
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sqs:
+                  $ref: '#/components/schemas/WebhookConfig'
+      responses:
+        '200':
+          description: Pusher set
+  /pusher/find/{instance}:
+    get:
+      tags:
+        - Integrations
+      summary: Find Pusher
+      description: Find Pusher configuration
+      operationId: pusherFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Pusher info
+  /webhook/set/{instance}:
+    post:
+      tags:
+        - Integrations
+      summary: Set Webhook
+      description: Set webhook configuration
+      operationId: webhookSet
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                webhook:
+                  $ref: '#/components/schemas/WebhookConfig'
+      responses:
+        '200':
+          description: Webhook set
+  /webhook/find/{instance}:
+    get:
+      tags:
+        - Integrations
+      summary: Find Webhook
+      description: Find webhook configuration
+      operationId: webhookFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Webhook info
+  /chatwoot/set/{instance}:
+    post:
+      tags:
+        - Chatbot
+      summary: Set Chatwoot
+      description: Set Chatwoot configuration
+      operationId: chatwootSet
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatwootConfig'
+      responses:
+        '200':
+          description: Chatwoot set
+  /chatwoot/find/{instance}:
+    get:
+      tags:
+        - Chatbot
+      summary: Find Chatwoot
+      description: Find Chatwoot configuration
+      operationId: chatwootFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Chatwoot info
+  /typebot/changeStatus/{instance}:
+    post:
+      tags:
+        - Typebot
+      summary: Change Session Status
+      description: Change Typebot session status
+      operationId: typebotChangeStatus
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                remoteJid:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                    - closed
+                    - opened
+                    - paused
+      responses:
+        '200':
+          description: Status changed
+  /typebot/fetchSessions/{typebotId}/{instance}:
+    get:
+      tags:
+        - Typebot
+      summary: Fetch Sessions
+      description: Fetch Typebot sessions
+      operationId: typebotFetchSessions
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: typebotId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sessions fetched
+  /typebot/settings/{instance}:
+    post:
+      tags:
+        - Typebot
+      summary: Set Default Settings
+      description: Set Typebot default settings
+      operationId: typebotSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+                typebotIdFallback:
+                  type: string
+      responses:
+        '200':
+          description: Settings set
+  /typebot/fetchSettings/{instance}:
+    get:
+      tags:
+        - Typebot
+      summary: Fetch Default Settings
+      description: Fetch Typebot default settings
+      operationId: typebotFetchSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Settings fetched
+  /typebot/create/{instance}:
+    post:
+      tags:
+        - Typebot
+      summary: Create Typebot
+      description: Create a Typebot
+      operationId: typebotCreate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TypebotCreate'
+      responses:
+        '200':
+          description: Typebot created
+  /typebot/find/{instance}:
+    get:
+      tags:
+        - Typebot
+      summary: Find Typebots
+      description: Find Typebots
+      operationId: typebotFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Typebots found
+  /typebot/fetch/{typebotId}/{instance}:
+    get:
+      tags:
+        - Typebot
+      summary: Fetch Typebot
+      description: Fetch a Typebot
+      operationId: typebotFetch
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: typebotId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Typebot fetched
+  /typebot/update/{typebotId}/{instance}:
+    put:
+      tags:
+        - Typebot
+      summary: Update Typebot
+      description: Update a Typebot
+      operationId: typebotUpdate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: typebotId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TypebotCreate'
+      responses:
+        '200':
+          description: Typebot updated
+  /typebot/delete/{typebotId}/{instance}:
+    delete:
+      tags:
+        - Typebot
+      summary: Delete Typebot
+      description: Delete a Typebot
+      operationId: typebotDelete
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: typebotId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Typebot deleted
+  /typebot/start/{instance}:
+    post:
+      tags:
+        - Typebot
+      summary: Start Typebot
+      description: Start a Typebot session
+      operationId: typebotStart
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                typebot:
+                  type: string
+                remoteJid:
+                  type: string
+                startSession:
+                  type: boolean
+                variables:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      value:
+                        type: string
+      responses:
+        '200':
+          description: Typebot started
+  /evolutionBot/changeStatus/{instance}:
+    post:
+      tags:
+        - Evolution Bot
+      summary: Change Session Status
+      description: Change Evolution Bot session status
+      operationId: evolutionBotChangeStatus
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                remoteJid:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                    - closed
+                    - opened
+                    - paused
+      responses:
+        '200':
+          description: Status changed
+  /evolutionBot/fetchSessions/{evolutionBotId}/{instance}:
+    get:
+      tags:
+        - Evolution Bot
+      summary: Fetch Sessions
+      description: Fetch Evolution Bot sessions
+      operationId: evolutionBotFetchSessions
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: evolutionBotId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sessions fetched
+  /evolutionBot/settings/{instance}:
+    post:
+      tags:
+        - Evolution Bot
+      summary: Set Default Settings
+      description: Set Evolution Bot default settings
+      operationId: evolutionBotSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+                botIdFallback:
+                  type: string
+      responses:
+        '200':
+          description: Settings set
+  /evolutionBot/fetchSettings/{instance}:
+    get:
+      tags:
+        - Evolution Bot
+      summary: Fetch Default Settings
+      description: Fetch Evolution Bot default settings
+      operationId: evolutionBotFetchSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Settings fetched
+  /evolutionBot/create/{instance}:
+    post:
+      tags:
+        - Evolution Bot
+      summary: Create Bots
+      description: Create Evolution Bots
+      operationId: evolutionBotCreate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                apiUrl:
+                  type: string
+                apiKey:
+                  type: string
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot created
+  /evolutionBot/find/{instance}:
+    get:
+      tags:
+        - Evolution Bot
+      summary: Find Bots
+      description: Find Evolution Bots
+      operationId: evolutionBotFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bots found
+  /evolutionBot/fetch/{evolutionBotId}/{instance}:
+    get:
+      tags:
+        - Evolution Bot
+      summary: Fetch Bot
+      description: Fetch an Evolution Bot
+      operationId: evolutionBotFetch
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: evolutionBotId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot fetched
+  /evolutionBot/update/{evolutionBotId}/{instance}:
+    put:
+      tags:
+        - Evolution Bot
+      summary: Update Bot
+      description: Update an Evolution Bot
+      operationId: evolutionBotUpdate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: evolutionBotId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                apiUrl:
+                  type: string
+                apiKey:
+                  type: string
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot updated
+  /evolutionBot/delete/{evolutionBotId}/{instance}:
+    delete:
+      tags:
+        - Evolution Bot
+      summary: Delete Bot
+      description: Delete an Evolution Bot
+      operationId: evolutionBotDelete
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: evolutionBotId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot deleted
+  /openai/changeStatus/{instance}:
+    post:
+      tags:
+        - Openai
+      summary: Change Session Status
+      description: Change OpenAI session status
+      operationId: openaiChangeStatus
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                remoteJid:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                    - closed
+                    - opened
+                    - paused
+      responses:
+        '200':
+          description: Status changed
+  /openai/fetchSessions/{openaiBotId}/{instance}:
+    get:
+      tags:
+        - Openai
+      summary: Fetch Sessions
+      description: Fetch OpenAI sessions
+      operationId: openaiFetchSessions
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: openaiBotId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sessions fetched
+  /openai/settings/{instance}:
+    post:
+      tags:
+        - Openai
+      summary: Set Default Settings
+      description: Set OpenAI default settings
+      operationId: openaiSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                openaiCredsId:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+                openaiIdFallback:
+                  type: string
+      responses:
+        '200':
+          description: Settings set
+  /openai/fetchSettings/{instance}:
+    get:
+      tags:
+        - Openai
+      summary: Fetch Default Settings
+      description: Fetch OpenAI default settings
+      operationId: openaiFetchSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Settings fetched
+  /openai/creds/{instance}:
+    post:
+      tags:
+        - Openai
+      summary: Set Openai Creds
+      description: Set OpenAI credentials
+      operationId: openaiCredsSet
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                apiKey:
+                  type: string
+      responses:
+        '200':
+          description: Creds set
+    get:
+      tags:
+        - Openai
+      summary: Get Openai Creds
+      description: Get OpenAI credentials
+      operationId: openaiCredsGet
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Creds fetched
+  /openai/creds/{openaiCredsId}/{instance}:
+    delete:
+      tags:
+        - Openai
+      summary: Delete Openai Creds
+      description: Delete OpenAI credentials
+      operationId: openaiCredsDelete
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: openaiCredsId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Creds deleted
+  /openai/create/{instance}:
+    post:
+      tags:
+        - Openai
+      summary: Create Openai Bots
+      description: Create OpenAI bots
+      operationId: openaiCreate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                openaiCredsId:
+                  type: string
+                botType:
+                  type: string
+                assistantId:
+                  type: string
+                functionUrl:
+                  type: string
+                model:
+                  type: string
+                systemMessages:
+                  type: array
+                  items:
+                    type: string
+                assistantMessages:
+                  type: array
+                  items:
+                    type: string
+                userMessages:
+                  type: array
+                  items:
+                    type: string
+                maxTokens:
+                  type: integer
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot created
+  /openai/find/{instance}:
+    get:
+      tags:
+        - Openai
+      summary: Find Openai Bots
+      description: Find OpenAI bots
+      operationId: openaiFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bots found
+  /openai/fetch/{openaiBotId}/{instance}:
+    get:
+      tags:
+        - Openai
+      summary: Fetch Openai Bot
+      description: Fetch an OpenAI bot
+      operationId: openaiFetch
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: openaiBotId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot fetched
+  /openai/update/{openaiBotId}/{instance}:
+    put:
+      tags:
+        - Openai
+      summary: Update Openai Bot
+      description: Update an OpenAI bot
+      operationId: openaiUpdate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: openaiBotId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                openaiCredsId:
+                  type: string
+                botType:
+                  type: string
+                assistantId:
+                  type: string
+                functionUrl:
+                  type: string
+                model:
+                  type: string
+                systemMessages:
+                  type: array
+                  items:
+                    type: string
+                assistantMessages:
+                  type: array
+                  items:
+                    type: string
+                userMessages:
+                  type: array
+                  items:
+                    type: string
+                maxTokens:
+                  type: integer
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot updated
+  /openai/delete/{openaiBotId}/{instance}:
+    delete:
+      tags:
+        - Openai
+      summary: Delete Openai Bot
+      description: Delete an OpenAI bot
+      operationId: openaiDelete
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: openaiBotId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot deleted
+  /dify/changeStatus/{instance}:
+    post:
+      tags:
+        - Dify
+      summary: Change Session Status
+      description: Change Dify session status
+      operationId: difyChangeStatus
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                remoteJid:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                    - closed
+                    - opened
+                    - paused
+      responses:
+        '200':
+          description: Status changed
+  /dify/fetchSessions/{difyId}/{instance}:
+    get:
+      tags:
+        - Dify
+      summary: Fetch Sessions
+      description: Fetch Dify sessions
+      operationId: difyFetchSessions
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: difyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sessions fetched
+  /dify/settings/{instance}:
+    post:
+      tags:
+        - Dify
+      summary: Set Default Settings
+      description: Set Dify default settings
+      operationId: difySettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+                difyIdFallback:
+                  type: string
+      responses:
+        '200':
+          description: Settings set
+  /dify/fetchSettings/{instance}:
+    get:
+      tags:
+        - Dify
+      summary: Fetch Default Settings
+      description: Fetch Dify default settings
+      operationId: difyFetchSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Settings fetched
+  /dify/create/{instance}:
+    post:
+      tags:
+        - Dify
+      summary: Create Dify Bots
+      description: Create Dify bots
+      operationId: difyCreate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                botType:
+                  type: string
+                apiUrl:
+                  type: string
+                apiKey:
+                  type: string
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot created
+  /dify/find/{instance}:
+    get:
+      tags:
+        - Dify
+      summary: Find Dify Bots
+      description: Find Dify bots
+      operationId: difyFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bots found
+  /dify/fetch/{difyId}/{instance}:
+    get:
+      tags:
+        - Dify
+      summary: Fetch Dify Bot
+      description: Fetch a Dify bot
+      operationId: difyFetch
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: difyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot fetched
+  /dify/update/{difyId}/{instance}:
+    put:
+      tags:
+        - Dify
+      summary: Update Dify Bot
+      description: Update a Dify bot
+      operationId: difyUpdate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: difyId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                botType:
+                  type: string
+                apiUrl:
+                  type: string
+                apiKey:
+                  type: string
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot updated
+  /dify/delete/{difyId}/{instance}:
+    delete:
+      tags:
+        - Dify
+      summary: Delete Dify Bot
+      description: Delete a Dify bot
+      operationId: difyDelete
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: difyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot deleted
+  /flowise/changeStatus/{instance}:
+    post:
+      tags:
+        - Flowise
+      summary: Change Session Status
+      description: Change Flowise session status
+      operationId: flowiseChangeStatus
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                remoteJid:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                    - closed
+                    - opened
+                    - paused
+      responses:
+        '200':
+          description: Status changed
+  /flowise/fetchSessions/{difyId}/{instance}:
+    get:
+      tags:
+        - Flowise
+      summary: Fetch Sessions
+      description: Fetch Flowise sessions
+      operationId: flowiseFetchSessions
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: difyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sessions fetched
+  /flowise/settings/{instance}:
+    post:
+      tags:
+        - Flowise
+      summary: Set Default Settings
+      description: Set Flowise default settings
+      operationId: flowiseSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+                flowiseIdFallback:
+                  type: string
+      responses:
+        '200':
+          description: Settings set
+  /flowise/fetchSettings/{instance}:
+    get:
+      tags:
+        - Flowise
+      summary: Fetch Default Settings
+      description: Fetch Flowise default settings
+      operationId: flowiseFetchSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Settings fetched
+  /flowise/create/{instance}:
+    post:
+      tags:
+        - Flowise
+      summary: Create Flowise Bots
+      description: Create Flowise bots
+      operationId: flowiseCreate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                apiUrl:
+                  type: string
+                apiKey:
+                  type: string
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot created
+  /flowise/find/{instance}:
+    get:
+      tags:
+        - Flowise
+      summary: Find Flowise Bots
+      description: Find Flowise bots
+      operationId: flowiseFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bots found
+  /flowise/fetch/{flowiseId}/{instance}:
+    get:
+      tags:
+        - Flowise
+      summary: Fetch Flowise Bot
+      description: Fetch a Flowise bot
+      operationId: flowiseFetch
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: flowiseId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot fetched
+  /flowise/update/{flowiseId}/{instance}:
+    put:
+      tags:
+        - Flowise
+      summary: Update Flowise Bot
+      description: Update a Flowise bot
+      operationId: flowiseUpdate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: flowiseId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                apiUrl:
+                  type: string
+                apiKey:
+                  type: string
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot updated
+  /flowise/delete/{flowiseId}/{instance}:
+    delete:
+      tags:
+        - Flowise
+      summary: Delete Flowise Bot
+      description: Delete a Flowise bot
+      operationId: flowiseDelete
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: flowiseId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot deleted
+  /n8n/changeStatus/{instance}:
+    post:
+      tags:
+        - N8N
+      summary: Change Session Status
+      description: Change N8N session status
+      operationId: n8nChangeStatus
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                remoteJid:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                    - closed
+                    - opened
+                    - paused
+      responses:
+        '200':
+          description: Status changed
+  /n8n/fetchSessions/{difyId}/{instance}:
+    get:
+      tags:
+        - N8N
+      summary: Fetch Sessions
+      description: Fetch N8N sessions
+      operationId: n8nFetchSessions
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: difyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sessions fetched
+  /n8n/settings/{instance}:
+    post:
+      tags:
+        - N8N
+      summary: Set Default Settings
+      description: Set N8N default settings
+      operationId: n8nSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+                n8nIdFallback:
+                  type: string
+      responses:
+        '200':
+          description: Settings set
+  /n8n/fetchSettings/{instance}:
+    get:
+      tags:
+        - N8N
+      summary: Fetch Default Settings
+      description: Fetch N8N default settings
+      operationId: n8nFetchSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Settings fetched
+  /n8n/create/{instance}:
+    post:
+      tags:
+        - N8N
+      summary: Create N8N Bots
+      description: Create N8N bots
+      operationId: n8nCreate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                apiUrl:
+                  type: string
+                apiKey:
+                  type: string
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot created
+  /n8n/find/{instance}:
+    get:
+      tags:
+        - N8N
+      summary: Find N8N Bots
+      description: Find N8N bots
+      operationId: n8nFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bots found
+  /n8n/fetch/{n8nId}/{instance}:
+    get:
+      tags:
+        - N8N
+      summary: Fetch N8N Bot
+      description: Fetch an N8N bot
+      operationId: n8nFetch
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: n8nId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot fetched
+  /n8n/update/{n8nId}/{instance}:
+    put:
+      tags:
+        - N8N
+      summary: Update N8N Bot
+      description: Update an N8N bot
+      operationId: n8nUpdate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: n8nId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                apiUrl:
+                  type: string
+                apiKey:
+                  type: string
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot updated
+  /n8n/delete/{n8nId}/{instance}:
+    delete:
+      tags:
+        - N8N
+      summary: Delete N8N Bot
+      description: Delete an N8N bot
+      operationId: n8nDelete
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: n8nId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot deleted
+  /evoai/changeStatus/{instance}:
+    post:
+      tags:
+        - Evo AI
+      summary: Change Session Status
+      description: Change Evo AI session status
+      operationId: evoaiChangeStatus
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                remoteJid:
+                  type: string
+                status:
+                  type: string
+                  enum:
+                    - closed
+                    - opened
+                    - paused
+      responses:
+        '200':
+          description: Status changed
+  /evoai/fetchSessions/{difyId}/{instance}:
+    get:
+      tags:
+        - Evo AI
+      summary: Fetch Sessions
+      description: Fetch Evo AI sessions
+      operationId: evoaiFetchSessions
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: difyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sessions fetched
+  /evoai/settings/{instance}:
+    post:
+      tags:
+        - Evo AI
+      summary: Set Default Settings
+      description: Set Evo AI default settings
+      operationId: evoaiSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+                evoaiIdFallback:
+                  type: string
+      responses:
+        '200':
+          description: Settings set
+  /evoai/fetchSettings/{instance}:
+    get:
+      tags:
+        - Evo AI
+      summary: Fetch Default Settings
+      description: Fetch Evo AI default settings
+      operationId: evoaiFetchSettings
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Settings fetched
+  /evoai/create/{instance}:
+    post:
+      tags:
+        - Evo AI
+      summary: Create EvoAI Bots
+      description: Create EvoAI bots
+      operationId: evoaiCreate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                apiUrl:
+                  type: string
+                apiKey:
+                  type: string
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot created
+  /evoai/find/{instance}:
+    get:
+      tags:
+        - Evo AI
+      summary: Find EvoAI Bots
+      description: Find EvoAI bots
+      operationId: evoaiFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bots found
+  /evoai/fetch/{evoaiId}/{instance}:
+    get:
+      tags:
+        - Evo AI
+      summary: Fetch EvoAI Bot
+      description: Fetch an EvoAI bot
+      operationId: evoaiFetch
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: evoaiId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot fetched
+  /evoai/update/{evoaiId}/{instance}:
+    put:
+      tags:
+        - Evo AI
+      summary: Update EvoAI Bot
+      description: Update an EvoAI bot
+      operationId: evoaiUpdate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: evoaiId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                apiUrl:
+                  type: string
+                apiKey:
+                  type: string
+                triggerType:
+                  type: string
+                triggerOperator:
+                  type: string
+                triggerValue:
+                  type: string
+                expire:
+                  type: integer
+                keywordFinish:
+                  type: string
+                delayMessage:
+                  type: integer
+                unknownMessage:
+                  type: string
+                listeningFromMe:
+                  type: boolean
+                stopBotFromMe:
+                  type: boolean
+                keepOpen:
+                  type: boolean
+                debounceTime:
+                  type: integer
+                ignoreJids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Bot updated
+  /evoai/delete/{evoaiId}/{instance}:
+    delete:
+      tags:
+        - Evo AI
+      summary: Delete EvoAI Bot
+      description: Delete an EvoAI bot
+      operationId: evoaiDelete
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: evoaiId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bot deleted
+  /message/sendTemplate/{instance}:
+    post:
+      tags:
+        - Cloud API Oficial
+      summary: Send Template
+      description: Send a template message
+      operationId: messageSendTemplate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: string
+                name:
+                  type: string
+                language:
+                  type: string
+                components:
+                  type: array
+                  items:
+                    type: object
+      responses:
+        '201':
+          description: Template sent
+  /template/create/{instance}:
+    post:
+      tags:
+        - Cloud API Oficial
+      summary: Create Template
+      description: Create a template
+      operationId: templateCreate
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TemplateCreate'
+      responses:
+        '201':
+          description: Template created
+  /template/find/{instance}:
+    get:
+      tags:
+        - Cloud API Oficial
+      summary: Find Templates
+      description: Find templates
+      operationId: templateFind
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Templates found
+  /webhook/evolution:
+    post:
+      tags:
+        - Evolution Channel
+      summary: Evolution Channel Webhook
+      description: Evolution channel webhook endpoint
+      operationId: webhookEvolution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                numberId:
+                  type: string
+                key:
+                  type: object
+                  properties:
+                    remoteJid:
+                      type: string
+                    fromMe:
+                      type: boolean
+                    id:
+                      type: string
+                pushName:
+                  type: string
+                message:
+                  type: object
+                  properties:
+                    conversation:
+                      type: string
+                messageType:
+                  type: string
+      responses:
+        '200':
+          description: Webhook received
+  /s3/getMedia/{instance}:
+    post:
+      tags:
+        - Storage
+      summary: Get Media
+      description: Retrieve media from storage
+      operationId: s3GetMedia
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+                messageId:
+                  type: string
+      responses:
+        '200':
+          description: Media retrieved
+  /s3/getMediaUrl/{instance}:
+    post:
+      tags:
+        - Storage
+      summary: Get Media Url
+      description: Retrieve media URL from storage
+      operationId: s3GetMediaUrl
+      parameters:
+        - name: instance
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+      responses:
+        '200':
+          description: Media URL retrieved
+  /:
+    get:
+      tags:
+        - Get Informations
+      summary: Get Informations
+      description: Get API information
+      operationId: getInformations
+      responses:
+        '200':
+          description: API Information
+  /metrics:
+    get:
+      tags:
+        - Metrics
+      summary: Metrics
+      description: Get metrics data
+      operationId: getMetrics
+      security:
+        - BasicAuth: []
+      responses:
+        '200':
+          description: Metrics data
