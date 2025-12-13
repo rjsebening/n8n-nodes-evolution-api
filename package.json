@@ -1,6 +1,6 @@
 {
   "name": "@rjsebening/n8n-nodes-evolution-api",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "n8n Community Node for the Evolution API (WhatsApp automation)",
   "keywords": [
     "n8n-community-node-package",
