@@ -7,22 +7,23 @@ import {
 	IDataObject,
 	IHttpRequestMethods,
 } from 'n8n-workflow';
-
 import { EvolutionApiCredentials } from '../../types/api';
 
-type ThisContext =
+type ApiContext =
 	| IExecuteFunctions
-	| ILoadOptionsFunctions
-	| IHookFunctions;
+	| IHookFunctions
+	| ILoadOptionsFunctions;
 
 export async function apiRequest(
-	this: ThisContext,
+	this: ApiContext,
 	method: IHttpRequestMethods,
 	endpoint: string,
 	body: IDataObject = {},
 	query: IDataObject = {},
 ): Promise<any> {
-	const credentials = (await this.getCredentials('evolutionApi')) as EvolutionApiCredentials;
+	const credentials = (await this.getCredentials(
+		'evolutionApi',
+	)) as EvolutionApiCredentials;
 
 	const baseUrl = credentials.baseUrl.replace(/\/$/, '');
 	const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
@@ -36,21 +37,18 @@ export async function apiRequest(
 	};
 
 	try {
-		return await (this.helpers as any).httpRequestWithAuthentication(
+		return await (this.helpers as any).httpRequestWithAuthentication.call(
+			this,
 			'evolutionApi',
 			options,
 		);
 	} catch (error) {
-		throw new NodeApiError(this.getNode(), error as JsonObject);
+		if (typeof (this as any).getNode === 'function') {
+			throw new NodeApiError(
+				(this as IExecuteFunctions | IHookFunctions).getNode(),
+				error as JsonObject,
+			);
+		}
+		throw error;
 	}
-}
-
-export async function apiRequestAllItems(
-	this: IExecuteFunctions,
-	method: IHttpRequestMethods,
-	endpoint: string,
-	body: IDataObject = {},
-	query: IDataObject = {},
-): Promise<any> {
-	return apiRequest.call(this, method, endpoint, body, query);
 }
