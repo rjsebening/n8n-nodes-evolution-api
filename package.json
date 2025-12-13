@@ -10,17 +10,17 @@
     "automation"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/rjsebening/n8n-nodes-evolutionapi#readme",
+  "homepage": "https://github.com/rjsebening/n8n-nodes-evolution-api#readme",
   "author": {
     "name": "Jörg Sebening",
     "email": "dev@joerg-sebening.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rjsebening/n8n-nodes-evolutionapi.git"
+    "url": "https://github.com/rjsebening/n8n-nodes-evolution-api.git"
   },
   "bugs": {
-    "url": "https://github.com/rjsebening/n8n-nodes-evolutionapi/issues"
+    "url": "https://github.com/rjsebening/n8n-nodes-evolution-api/issues"
   },
   "main": "index.js",
   "scripts": {
