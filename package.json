@@ -3,9 +3,10 @@
   "version": "1.0.1",
   "description": "n8n Community Node for the Evolution API (WhatsApp automation)",
   "keywords": [
-    "n8n-community-node",
+    "n8n-community-node-package",
     "n8n",
     "evolution-api",
+    "n8n-nodes-evolution-api",
     "whatsapp",
     "automation"
   ],
