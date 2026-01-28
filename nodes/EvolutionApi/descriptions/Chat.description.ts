@@ -329,18 +329,32 @@ export const chatFields: INodeProperties[] = [
 	/*                                chat:updateMessage                          */
 	/* -------------------------------------------------------------------------- */
 	{
-		displayName: 'Number',
-		name: 'number',
+		displayName: 'Remote JID',
+		name: 'remoteJid',
 		type: 'string',
 		required: true,
 		default: '',
+		placeholder: '49123456789@s.whatsapp.net',
 		displayOptions: {
 			show: {
 				resource: ['chat'],
 				operation: ['updateMessage'],
 			},
 		},
-		description: 'Phone number of the chat containing the message',
+		description: 'JID of the WhatsApp chat containing the message',
+	},
+	{
+		displayName: 'From Me',
+		name: 'fromMe',
+		type: 'boolean',
+		default: true,
+		displayOptions: {
+			show: {
+				resource: ['chat'],
+				operation: ['updateMessage'],
+			},
+		},
+		description: 'Whether the message was sent by this instance',
 	},
 	{
 		displayName: 'Text',
@@ -464,6 +478,22 @@ export const chatFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                chat:findMessages                           */
 	/* -------------------------------------------------------------------------- */
+
+	{
+		displayName: 'Remote JID',
+		name: 'remoteJid',
+		type: 'string',
+		default: '',
+		required: true,
+		placeholder: '49123456789@s.whatsapp.net',
+		displayOptions: {
+			show: {
+				resource: ['chat'],
+				operation: ['findMessages', 'findStatusMessage'],
+			},
+		},
+		description: 'JID of the WhatsApp chat to search for',
+	},
 	{
 		displayName: 'Page',
 		name: 'page',
@@ -494,19 +524,6 @@ export const chatFields: INodeProperties[] = [
 	/* -------------------------------------------------------------------------- */
 	/*                                chat:findStatusMessage                      */
 	/* -------------------------------------------------------------------------- */
-	{
-		displayName: 'Remote JID',
-		name: 'remoteJid',
-		type: 'string',
-		default: '',
-		displayOptions: {
-			show: {
-				resource: ['chat'],
-				operation: ['findStatusMessage'],
-			},
-		},
-		description: 'Filter by remote JID',
-	},
 	{
 		displayName: 'Message ID',
 		name: 'messageId',

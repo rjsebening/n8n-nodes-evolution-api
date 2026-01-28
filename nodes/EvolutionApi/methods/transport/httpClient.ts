@@ -9,10 +9,7 @@ import {
 } from 'n8n-workflow';
 import { EvolutionApiCredentials } from '../../types/api';
 
-type ApiContext =
-	| IExecuteFunctions
-	| IHookFunctions
-	| ILoadOptionsFunctions;
+type ApiContext = IExecuteFunctions | IHookFunctions | ILoadOptionsFunctions;
 
 export async function apiRequest(
 	this: ApiContext,
@@ -21,9 +18,7 @@ export async function apiRequest(
 	body: IDataObject = {},
 	query: IDataObject = {},
 ): Promise<any> {
-	const credentials = (await this.getCredentials(
-		'evolutionApi',
-	)) as EvolutionApiCredentials;
+	const credentials = (await this.getCredentials('evolutionApi')) as EvolutionApiCredentials;
 
 	const baseUrl = credentials.baseUrl.replace(/\/$/, '');
 	const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
@@ -37,17 +32,10 @@ export async function apiRequest(
 	};
 
 	try {
-		return await (this.helpers as any).httpRequestWithAuthentication.call(
-			this,
-			'evolutionApi',
-			options,
-		);
+		return await (this.helpers as any).httpRequestWithAuthentication.call(this, 'evolutionApi', options);
 	} catch (error) {
 		if (typeof (this as any).getNode === 'function') {
-			throw new NodeApiError(
-				(this as IExecuteFunctions | IHookFunctions).getNode(),
-				error as JsonObject,
-			);
+			throw new NodeApiError((this as IExecuteFunctions | IHookFunctions).getNode(), error as JsonObject);
 		}
 		throw error;
 	}
