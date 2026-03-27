@@ -1,12 +1,14 @@
 import { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { apiRequest } from '../../methods/transport/httpClient';
 import { ISendPoll } from '../../types/api';
+import { buildMessageOptions } from './helpers';
 
 export async function sendPoll(this: IExecuteFunctions, index: number): Promise<any> {
 	const instanceName = this.getNodeParameter('instanceName', index) as string;
 	const number = this.getNodeParameter('number', index) as string;
 	const name = this.getNodeParameter('name', index) as string;
 	const selectableCount = this.getNodeParameter('selectableCount', index) as number;
+	const options = this.getNodeParameter('options', index, {}) as IDataObject;
 
 	const rawValues = this.getNodeParameter('values', index) as unknown;
 
@@ -42,6 +44,8 @@ export async function sendPoll(this: IExecuteFunctions, index: number): Promise<
 		selectableCount,
 		values,
 	};
+
+	Object.assign(body, buildMessageOptions(options));
 
 	const response = await apiRequest.call(
 		this,

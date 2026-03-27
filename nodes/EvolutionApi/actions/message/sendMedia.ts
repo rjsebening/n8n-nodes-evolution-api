@@ -1,6 +1,7 @@
 import { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { apiRequest } from '../../methods/transport/httpClient';
 import { ISendMedia } from '../../types/api';
+import { buildMessageOptions } from './helpers';
 
 export async function sendMedia(this: IExecuteFunctions, index: number): Promise<any> {
 	const instanceName = this.getNodeParameter('instanceName', index) as string;
@@ -9,14 +10,27 @@ export async function sendMedia(this: IExecuteFunctions, index: number): Promise
 	const media = this.getNodeParameter('media', index) as string;
 	const caption = this.getNodeParameter('caption', index) as string;
 	const fileName = this.getNodeParameter('fileName', index) as string;
+	const mimetype = this.getNodeParameter('mimetype', index) as string;
+	const options = this.getNodeParameter('options', index, {}) as IDataObject;
 
 	const body: ISendMedia = {
 		number,
 		mediatype,
 		media,
+		mimetype,
 		caption,
 		fileName,
 	};
+
+	if (options.delay !== undefined) {
+		body.delay = options.delay as number;
+	}
+
+	if (options.linkPreview !== undefined) {
+		body.linkPreview = options.linkPreview as boolean;
+	}
+
+	Object.assign(body, buildMessageOptions(options));
 
 	const response = await apiRequest.call(
 		this,

@@ -51,20 +51,35 @@ export interface ISettingsConfig {
 }
 
 // Message Types
-export interface ISendText {
+export interface IMessageOptions {
+	mentionsEveryOne?: boolean;
+	mentioned?: string[];
+	quoted?: {
+		key?: {
+			id?: string;
+		};
+		message?: {
+			conversation?: string;
+		};
+	};
+}
+
+export interface ISendText extends IMessageOptions {
 	number: string;
 	text: string;
 	delay?: number;
 	linkPreview?: boolean;
 }
 
-export interface ISendMedia {
+export interface ISendMedia extends IMessageOptions {
 	number: string;
 	mediatype: 'image' | 'video' | 'document';
 	media: string; // URL or Base64
 	mimetype?: string;
 	caption?: string;
 	fileName?: string;
+	delay?: number;
+	linkPreview?: boolean;
 }
 
 export interface ISendPtv {
@@ -72,7 +87,7 @@ export interface ISendPtv {
 	video: string; // URL or Base64
 }
 
-export interface ISendAudio {
+export interface ISendAudio extends IMessageOptions {
 	number: string;
 	audio: string; // URL or Base64
 }
@@ -87,7 +102,7 @@ export interface ISendStatus {
 	statusJidList?: string[];
 }
 
-export interface ISendSticker {
+export interface ISendSticker extends IMessageOptions {
 	number: string;
 	sticker: string; // URL or Base64
 }
@@ -118,14 +133,14 @@ export interface ISendReaction {
 	reaction: string;
 }
 
-export interface ISendPoll {
+export interface ISendPoll extends IMessageOptions {
 	number: string;
 	name: string;
 	selectableCount: number;
 	values: string[];
 }
 
-export interface ISendList {
+export interface ISendList extends IMessageOptions {
 	number: string;
 	title: string;
 	description?: string;
@@ -141,7 +156,7 @@ export interface ISendList {
 	}>;
 }
 
-export interface ISendButton {
+export interface ISendButton extends IMessageOptions {
 	number: string;
 	title: string;
 	description?: string;

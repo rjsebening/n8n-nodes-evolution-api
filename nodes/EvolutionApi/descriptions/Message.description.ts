@@ -156,35 +156,6 @@ export const messageFields: INodeProperties[] = [
 		},
 		description: 'Text message to be sent',
 	},
-	{
-		displayName: 'Options',
-		name: 'options',
-		type: 'collection',
-		placeholder: 'Add Option',
-		default: {},
-		displayOptions: {
-			show: {
-				resource: ['message'],
-				operation: ['sendText'],
-			},
-		},
-		options: [
-			{
-				displayName: 'Delay (Ms)',
-				name: 'delay',
-				type: 'number',
-				default: 1200,
-				description: 'Delay in milliseconds before sending the message',
-			},
-			{
-				displayName: 'Link Preview',
-				name: 'linkPreview',
-				type: 'boolean',
-				default: true,
-				description: 'Whether to generate a preview for links in the message',
-			},
-		],
-	},
 
 	/* -------------------------------------------------------------------------- */
 	/*                                message:sendMedia                           */
@@ -693,5 +664,97 @@ export const messageFields: INodeProperties[] = [
 			},
 		},
 		description: 'Array of buttons to be displayed. Example: [{"type":"reply","displayText":"Yes","ID":"yes-btn"}].',
+	},
+	{
+		displayName: 'Options',
+		name: 'options',
+		type: 'collection',
+		placeholder: 'Add Option',
+		default: {},
+		displayOptions: {
+			show: {
+				resource: ['message'],
+				operation: ['sendText', 'sendMedia', 'sendWhatsAppAudio', 'sendSticker', 'sendPoll', 'sendList', 'sendButtons'],
+			},
+		},
+		options: [
+			{
+				displayName: 'Delay (Ms)',
+				name: 'delay',
+				type: 'number',
+				default: 1200,
+				displayOptions: {
+					show: {
+						'/operation': ['sendText', 'sendMedia'],
+					},
+				},
+				description: 'Delay in milliseconds before sending the message',
+			},
+			{
+				displayName: 'Link Preview',
+				name: 'linkPreview',
+				type: 'boolean',
+				default: true,
+				displayOptions: {
+					show: {
+						'/operation': ['sendText', 'sendMedia'],
+					},
+				},
+				description: 'Whether to generate a preview for links in the message',
+			},
+			{
+				displayName: 'Mentioned',
+				name: 'mentioned',
+				type: 'json',
+				default: '[]',
+				description: 'Array of mentioned WhatsApp IDs. Example: ["5511999999999@s.whatsapp.net"].',
+			},
+			{
+				displayName: 'Mentions Everyone',
+				name: 'mentionsEveryOne',
+				type: 'boolean',
+				default: false,
+				description: 'Whether to mention everyone in the conversation',
+			},
+			{
+				displayName: 'Quoted',
+				name: 'quoted',
+				type: 'collection',
+				default: {},
+				description: 'Message data to quote in the outgoing text message',
+				options: [
+					{
+						displayName: 'Key',
+						name: 'key',
+						type: 'collection',
+						default: {},
+						options: [
+							{
+								displayName: 'Message ID',
+								name: 'id',
+								type: 'string',
+								default: '',
+								description: 'ID of the message being quoted',
+							},
+						],
+					},
+					{
+						displayName: 'Message',
+						name: 'message',
+						type: 'collection',
+						default: {},
+						options: [
+							{
+								displayName: 'Conversation',
+								name: 'conversation',
+								type: 'string',
+								default: '',
+								description: 'Text content of the quoted message',
+							},
+						],
+					},
+				],
+			},
+		],
 	},
 ];

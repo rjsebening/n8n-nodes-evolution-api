@@ -1,6 +1,7 @@
 import { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { apiRequest } from '../../methods/transport/httpClient';
 import { ISendButton } from '../../types/api';
+import { buildMessageOptions } from './helpers';
 
 export async function sendButtons(this: IExecuteFunctions, index: number): Promise<any> {
 	const instanceName = this.getNodeParameter('instanceName', index) as string;
@@ -9,6 +10,7 @@ export async function sendButtons(this: IExecuteFunctions, index: number): Promi
 	const buttons = this.getNodeParameter('buttons', index) as any[];
 	const description = this.getNodeParameter('description', index) as string;
 	const footer = this.getNodeParameter('footer', index) as string;
+	const options = this.getNodeParameter('options', index, {}) as IDataObject;
 
 	const body: ISendButton = {
 		number,
@@ -17,6 +19,8 @@ export async function sendButtons(this: IExecuteFunctions, index: number): Promi
 		description,
 		footer,
 	};
+
+	Object.assign(body, buildMessageOptions(options));
 
 	const response = await apiRequest.call(
 		this,

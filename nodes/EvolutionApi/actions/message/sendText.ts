@@ -1,6 +1,7 @@
 import { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { apiRequest } from '../../methods/transport/httpClient';
 import { ISendText } from '../../types/api';
+import { buildMessageOptions } from './helpers';
 
 export async function sendText(this: IExecuteFunctions, index: number): Promise<any> {
 	const instanceName = this.getNodeParameter('instanceName', index) as string;
@@ -11,9 +12,17 @@ export async function sendText(this: IExecuteFunctions, index: number): Promise<
 	const body: ISendText = {
 		number,
 		text,
-		delay: options.delay as number,
-		linkPreview: options.linkPreview as boolean,
 	};
+
+	if (options.delay !== undefined) {
+		body.delay = options.delay as number;
+	}
+
+	if (options.linkPreview !== undefined) {
+		body.linkPreview = options.linkPreview as boolean;
+	}
+
+	Object.assign(body, buildMessageOptions(options));
 
 	const response = await apiRequest.call(
 		this,

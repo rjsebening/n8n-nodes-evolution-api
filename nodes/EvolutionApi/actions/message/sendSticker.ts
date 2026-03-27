@@ -1,16 +1,20 @@
 import { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { apiRequest } from '../../methods/transport/httpClient';
 import { ISendSticker } from '../../types/api';
+import { buildMessageOptions } from './helpers';
 
 export async function sendSticker(this: IExecuteFunctions, index: number): Promise<any> {
 	const instanceName = this.getNodeParameter('instanceName', index) as string;
 	const number = this.getNodeParameter('number', index) as string;
 	const sticker = this.getNodeParameter('sticker', index) as string;
+	const options = this.getNodeParameter('options', index, {}) as IDataObject;
 
 	const body: ISendSticker = {
 		number,
 		sticker,
 	};
+
+	Object.assign(body, buildMessageOptions(options));
 
 	const response = await apiRequest.call(
 		this,

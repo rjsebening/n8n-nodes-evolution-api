@@ -1,11 +1,7 @@
 import { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { apiRequest } from '../../methods/transport/httpClient';
 
-export async function updateMessage(
-	this: IExecuteFunctions,
-	index: number,
-): Promise<any> {
-
+export async function updateMessage(this: IExecuteFunctions, index: number): Promise<any> {
 	const instanceName = this.getNodeParameter('instanceName', index) as string;
 
 	const remoteJid = this.getNodeParameter('remoteJid', index) as string;
@@ -23,10 +19,5 @@ export async function updateMessage(
 		},
 	};
 
-	return apiRequest.call(
-		this,
-		'POST',
-		`/chat/updateMessage/${instanceName}`,
-		body,
-	);
+	return apiRequest.call(this, 'POST', `/chat/updateMessage/${instanceName}`, body);
 }

@@ -1,6 +1,7 @@
 import { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { apiRequest } from '../../methods/transport/httpClient';
 import { ISendList } from '../../types/api';
+import { buildMessageOptions } from './helpers';
 
 export async function sendList(this: IExecuteFunctions, index: number): Promise<any> {
 	const instanceName = this.getNodeParameter('instanceName', index) as string;
@@ -9,6 +10,7 @@ export async function sendList(this: IExecuteFunctions, index: number): Promise<
 	const buttonText = this.getNodeParameter('buttonText', index) as string;
 	const description = this.getNodeParameter('description', index) as string;
 	const footerText = this.getNodeParameter('footerText', index) as string;
+	const options = this.getNodeParameter('options', index, {}) as IDataObject;
 	// Expecting sections to be passed as JSON or UI Collection in a real scenario,
 	// assuming fixed structure from UI for now or raw object input for complexity
 	const sections = this.getNodeParameter('sections', index) as any[];
@@ -21,6 +23,8 @@ export async function sendList(this: IExecuteFunctions, index: number): Promise<
 		footerText,
 		sections,
 	};
+
+	Object.assign(body, buildMessageOptions(options));
 
 	const response = await apiRequest.call(
 		this,
