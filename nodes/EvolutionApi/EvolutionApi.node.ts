@@ -1,4 +1,4 @@
-import { IExecuteFunctions, INodeType, INodeTypeDescription } from 'n8n-workflow';
+import { IExecuteFunctions, INodeType, INodeTypeDescription, NodeConnectionTypes } from 'n8n-workflow';
 import { instanceOperations, instanceFields } from './descriptions/Instance.description';
 import { messageOperations, messageFields } from './descriptions/Message.description';
 import { groupOperations, groupFields } from './descriptions/Group.description';
@@ -29,8 +29,9 @@ export class EvolutionApi implements INodeType {
 		defaults: {
 			name: 'Evolution API',
 		},
-		inputs: ['main'],
-		outputs: ['main'],
+		usableAsTool: true,
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
 				name: 'evolutionApi',

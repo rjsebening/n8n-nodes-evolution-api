@@ -7,6 +7,7 @@ export async function create(this: IExecuteFunctions, index: number): Promise<an
 	const subject = this.getNodeParameter('subject', index) as string;
 	const description = this.getNodeParameter('description', index) as string;
 	const participantsString = this.getNodeParameter('participants', index) as string;
+	const promoteParticipants = this.getNodeParameter('promoteParticipants', index, false) as boolean;
 
 	// Defensive splitting of participants
 	const participants = participantsString
@@ -19,6 +20,10 @@ export async function create(this: IExecuteFunctions, index: number): Promise<an
 		description,
 		participants,
 	};
+
+	if (promoteParticipants) {
+		body.promoteParticipants = true;
+	}
 
 	const response = await apiRequest.call(this, 'POST', `/group/create/${instanceName}`, body as unknown as IDataObject);
 

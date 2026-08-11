@@ -233,6 +233,7 @@ export interface IGroupCreate {
 	subject: string;
 	description?: string;
 	participants: string[];
+	promoteParticipants?: boolean;
 }
 
 export interface IGroupUpdateParticipant {

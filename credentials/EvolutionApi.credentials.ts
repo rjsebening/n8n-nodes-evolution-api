@@ -1,8 +1,15 @@
-import { IAuthenticateGeneric, ICredentialTestRequest, ICredentialType, INodeProperties } from 'n8n-workflow';
+import {
+	IAuthenticateGeneric,
+	ICredentialTestRequest,
+	ICredentialType,
+	Icon,
+	INodeProperties,
+} from 'n8n-workflow';
 
 export class EvolutionApi implements ICredentialType {
 	name = 'evolutionApi';
 	displayName = 'Evolution API';
+	icon: Icon = 'file:evolutionApi.svg';
 	documentationUrl = 'https://doc.evolution-api.com/';
 	properties: INodeProperties[] = [
 		{

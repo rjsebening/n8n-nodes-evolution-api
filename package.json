@@ -30,7 +30,8 @@
     "format": "prettier nodes credentials --write",
     "lint": "eslint nodes credentials --ext .ts",
     "lint:fix": "eslint nodes credentials --ext .ts --fix",
-    "lint:all": "npm run lint && npm run lint:node"
+    "lint:all": "npm run lint && npm run lint:node",
+    "lint:scan": "node scripts/scan-local.mjs"
   },
   "files": [
     "dist",
@@ -56,7 +57,7 @@
     "typescript": "^5.8.2"
   },
   "peerDependencies": {
-    "n8n-workflow": ">=1.0.0"
+    "n8n-workflow": "*"
   },
   "publishConfig": {
     "access": "public"

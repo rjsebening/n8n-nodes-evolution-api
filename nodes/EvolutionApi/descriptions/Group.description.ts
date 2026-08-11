@@ -204,6 +204,19 @@ export const groupFields: INodeProperties[] = [
 		},
 		description: 'Text description to set for the group',
 	},
+	{
+		displayName: 'Promote Participants',
+		name: 'promoteParticipants',
+		type: 'boolean',
+		default: false,
+		displayOptions: {
+			show: {
+				resource: ['group'],
+				operation: ['create'],
+			},
+		},
+		description: 'Whether to promote the added participants to group admins',
+	},
 
 	/* -------------------------------------------------------------------------- */
 	/*                                group:fetchAllGroups                        */

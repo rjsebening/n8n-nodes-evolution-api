@@ -34,9 +34,7 @@ export async function apiRequest(
 	try {
 		return await (this.helpers as any).httpRequestWithAuthentication.call(this, 'evolutionApi', options);
 	} catch (error) {
-		if (typeof (this as any).getNode === 'function') {
-			throw new NodeApiError((this as IExecuteFunctions | IHookFunctions).getNode(), error as JsonObject);
-		}
-		throw error;
+		// Every ApiContext variant exposes getNode(), so no runtime guard is needed.
+		throw new NodeApiError(this.getNode(), error as JsonObject);
 	}
 }
